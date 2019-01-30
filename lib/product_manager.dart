@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
 import './products.dart';
+import './product_control.dart';
 
 class ProductManager extends StatefulWidget {
-  String startingProduct;
+  final String startingProduct;
 
-  ProductManager(this.startingProduct);
+  ProductManager({this.startingProduct = 'Nissan 4x4'}) {
+    print('[ProductManager Widget] Constructor');
+  }
 
   @override
   State<StatefulWidget> createState() {
+    print('[ProductManager Widget] createState()');
     return _ProductManagerState();
   }
 }
@@ -18,21 +22,31 @@ class _ProductManagerState extends State<ProductManager> {
 
   @override
   void initState() {
-    _products.add(widget.startingProduct);  
+    print('[ProductManager State] initState()');
+    _products.add(widget.startingProduct);
     super.initState();
   }
 
   @override
+  void didUpdateWidget(ProductManager oldWidget) {
+    print('[ProductManager State] didUpdateWidget()');
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _appProduct(String product) {
+    setState(() {
+      _products.add(product);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(children: [Container(
+    print('[ProductManager State] build()');
+    return Column(
+      children: [
+        Container(
           margin: EdgeInsets.all(10.0),
-          child: RaisedButton(
-              onPressed: () {
-                setState(() {
-                  _products.add('Nissan Patrol 4x4');
-                });
-              },
-              child: Text("Add Product")),
+          child: ProductControl(_appProduct),
         ),
         Products(_products)
       ],
